@@ -1,4 +1,24 @@
 
+function toggleImperialBtnState(){
+    document.getElementById("toggle-style").innerHTML = `
+    .toggleContainer::before {
+        left: 50%;
+    }
+    .toggleCheckbox + .toggleContainer div:first-child{
+        /* color: #343434; */
+        color: white;
+    }
+    .toggleCheckbox + .toggleContainer div:last-child{
+        /* color: white; */
+        color: #343434;
+    }
+    `;
+}
+
+function toggleMetricBtnState(){
+document.getElementById("toggle-style").innerHTML = ``;
+// when you empty this style tag out, it will fall back to Assets/style.css styles, which is the style for metric
+}
 
 // Direct geocoding allows to get geographical coordinates (lat, lon) by using name of the location (city name or area name). If you use the limit parameter in the API call, you can cap how many locations with the same name will be seen in the API response (for instance, London in the UK and London in the US).
 // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
@@ -18,9 +38,39 @@ var country = "AU"
 
 var unitsSwitch = document.getElementsByClassName("units-switch")[0]
 
+// test
+country = "MM"
 
-var units = 'metric';
-unitsSwitch.classList.add('metric')
+// Automatically set units based on country returned by the API call
+var units;
+if(country == "MM" || "LR" || "US"){
+    units='imperial';
+    // document.querySelector(".toggleContainer::before").style.setProperty("left","50%")
+    // Uncaught TypeError: Cannot read properties of null (reading 'style')
+    // You cannot edit a pseudo element from Javascript directly as they do not exist except to the CSS stylesheet
+    // Instead, create inline styles tag in the current DOM and edit that
+    // solution inspired by
+    // https://stackoverflow.com/a/25748085/9095603
+    // https://stackoverflow.com/a/13357564/9095603
+
+    toggleImperialBtnState()
+}
+else{
+    units = 'metric';
+    // document.querySelector(".toggleContainer::before").style.setProperty("left","0%")
+    // Uncaught TypeError: Cannot read properties of null (reading 'style')
+    // You cannot edit a pseudo element from Javascript directly as they do not exist except to the CSS stylesheet
+    // Instead, create inline styles tag in the current DOM and edit that
+    // solution inspired by
+    // https://stackoverflow.com/a/25748085/9095603
+    // https://stackoverflow.com/a/13357564/9095603
+    toggleMetricBtnState()
+}
+
+// https://stackoverflow.com/a/65283552/9095603
+// ... if you know their location, you can default to Imperial in the United States, Liberia or Myanmar and use Metric in other locations
+
+
 // try{unitsSwitch.classList.remove('imperial')}
 // catch{console.log("Cannot remove 'imperial', possibly because it was not an existing class.")}
 // City input
@@ -44,30 +94,40 @@ unitsSwitch.classList.add('metric')
 
 unitsSwitch.addEventListener("click",function () {
     if (units == 'metric') {
-        unitsSwitch.classList.remove('metric')
-        unitsSwitch.classList.add('imperial')
+        // unitsSwitch.classList.remove('metric')
+        // unitsSwitch.classList.add('imperial')
         units = 'imperial';
         console.log("metric -> imperial");
         console.log('Units is now set to: ' + units);
         
+        // https://stackoverflow.com/a/3871602/9095603
         // https://bobbyhadz.com/blog/javascript-change-style-of-all-elements-with-class
         var metricSpans = document.getElementsByClassName("metric")
         console.log({metricSpans})
-        metricSpans.forEach(metricSpan => {
+        Array.prototype.forEach.call(metricSpans, function(metricSpan){
             metricSpan.style.setProperty("display","none");
         });
         
         var imperialSpans = document.getElementsByClassName("imperial")
-        console.log({imperialSpans})
-        imperialSpans.forEach(imperialSpan => {
+        Array.prototype.forEach.call(imperialSpans, function(imperialSpan){
             imperialSpan.style.setProperty("display","inline");
+
+            // CSS Animation onClick
+            // Use sad comrade method to reset animation for every new click
+            // https://stackoverflow.com/a/58353279/9095603
+            // reset .flash animation class
+            imperialSpan.classList.remove("flash")
+            // fire .flash animation class
+            imperialSpan.classList.add("flash")
+
+        toggleImperialBtnState()
+        
         });
-        
-        
+      
 
     } else if (units == 'imperial') {
-        unitsSwitch.classList.remove('imperial')
-        unitsSwitch.classList.add('metric')
+        // unitsSwitch.classList.remove('imperial')
+        // unitsSwitch.classList.add('metric')
         units = 'metric'
         console.log("imperial -> metric");
         console.log('Units is now set to: ' + units);
@@ -75,16 +135,34 @@ unitsSwitch.addEventListener("click",function () {
         // https://bobbyhadz.com/blog/javascript-change-style-of-all-elements-with-class
         var metricSpans = document.getElementsByClassName("metric")
         console.log({metricSpans})
-        metricSpans.forEach(metricSpan => {
+        Array.prototype.forEach.call(metricSpans, function(metricSpan){
             metricSpan.style.setProperty("display","inline");
+
+            // CSS Animation onClick
+            // Use sad comrade method to reset animation for every new click
+            // https://stackoverflow.com/a/58353279/9095603
+            // reset .flash animation class
+            metricSpan.classList.remove("flash")
+            // fire .flash animation class
+            metricSpan.classList.add("flash")
         });
         
         var imperialSpans = document.getElementsByClassName("imperial")
-        console.log({imperialSpans})
-        imperialSpans.forEach(imperialSpan => {
+        Array.prototype.forEach.call(imperialSpans, function(imperialSpan){
             imperialSpan.style.setProperty("display","none");
         });
 
+
+        // console.log({imperialSpans})
+        // imperialSpans.forEach(imperialSpan => {
+        //     imperialSpan.style.setProperty("display","none");
+        // });
+        // Uncaught TypeError: metricSpans.forEach is not a function
+        // No, it's not an array. As specified in DOM4, it's an HTMLCollection (in modern browsers, at least. Older browsers returned a NodeList).
+        // https://stackoverflow.com/a/3871602/9095603
+
+
+        toggleMetricBtnState()
     }
 }
 
@@ -100,6 +178,12 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
     console.table(data.list)
     console.log(JSON.stringify(data))
 
+    timezone = data.city.timezone;
+    console.log({timezone})
+    country = data.city.country;
+    console.log({country})
+    cityName = data.city.name
+    console.log({cityName})
  
     var datesArray = [];
     console.log({datesArray})
@@ -124,11 +208,15 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         // Simply multiply Unix timestamp by 1000 to convert it to a JavaScript time, because Unix timestamp measures time as a number of seconds, whereas in JavaScript time is fundamentally specified as the number of milliseconds (elapsed since January 1, 1970 at 00:00:00 UTC).
         jsTimestamp = unixTimestamp * 1000
         var date = new Date(jsTimestamp);
-        dateLocal = date.toLocaleDateString("en-AU")
+        var basicDateLocalAU = date.toLocaleDateString("en-AU")
+        var basicDateLocalUS = date.toLocaleDateString("en-US")
+        var basicDateLocalUser = date.toLocaleDateString(`en-${country}`)
 
-        console.log(dateLocal);   // Prints: 5/6/2022
+        console.log(basicDateLocalAU);   // Prints: 5/6/2022
+        console.log(basicDateLocalUS);   // Prints: 6/5/2022
+        console.log(basicDateLocalUser);   // Prints: 6/5/2022
 
-        timeLocal = date.toLocaleTimeString("en-AU", {hour: '2-digit', minute:'2-digit'}) // Prints: 13:10:34
+        timeLocalAU = date.toLocaleTimeString("en-AU", {hour: '2-digit', minute:'2-digit'}) // Prints: 13:10:34
 
         // How do I use .toLocaleTimeString() without displaying seconds?
         // https://stackoverflow.com/a/20430558/9095603
@@ -139,13 +227,16 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
 
         // var newWeatherArray;
 
-        // newWeatherArray[dateLocal].push({})
+        // newWeatherArray[basicDateLocalAU].push({})
 
-        data.list[i].basicCalendarDate = dateLocal
+        data.list[i].basicDateLocalAU = basicDateLocalAU
+        data.list[i].basicDateLocalUS = basicDateLocalUS
+        data.list[i].basicDateLocalUser = basicDateLocalUser
         data.list[i].dayOfWeekIndex = date.getDay()
         data.list[i].dayOfWeekValue = days[date.getDay()]
 
-        data.list[i].basicTime = timeLocal
+        // time format is the same everywhere so we can just use Australia for convenience
+        data.list[i].basicTime = timeLocalAU
 
 
 
@@ -154,8 +245,8 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         // Array.push() Element if does not exist in JavaScript
         // https://bobbyhadz.com/blog/javascript-array-push-if-not-exist
 
-        if (!datesArray.includes(dateLocal)) {
-            datesArray.push(dateLocal);
+        if (!datesArray.includes(basicDateLocalUser)) {
+            datesArray.push(basicDateLocalUser);
             
             var dayOfWeek = days[date.getDay()];
             console.log(dayOfWeek)
@@ -175,11 +266,11 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
 
 
 
-    var obj = groupBy(datalist, "basicCalendarDate");
+    var obj = groupBy(datalist, "basicDateLocalAU");
     console.log({obj})
 
     // Uncaught (in promise) TypeError: data.list.group is not a function
-    // const result = data.list.group(({ basicCalendarDate }) => basicCalendarDate);
+    // const result = data.list.group(({ basicCalendarDateAU }) => basicCalendarDateAU);
     // console.log({result})
 
 
@@ -200,11 +291,23 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         for(var j = 0; j < obj[i].length; j++){
             console.log(obj[i].length);
            
+            // if not yet written, then write it
             if(!document.querySelector(`#day${i} h5`).innerText){
                 document.querySelector(`#day${i} h5`).innerText = `${obj[i][j].dayOfWeekValue}`
             }
-            if(!document.querySelector(`#day${i} h6`).innerText){
-                document.querySelector(`#day${i} h6`).innerText = `${obj[i][j].basicCalendarDate}`
+            // if not yet written, then write it
+            if(!document.querySelector(`#day${i} span#usercountry-dateformat`).innerText){
+                document.querySelector(`#day${i} span#usercountry-dateformat`).innerText = `${obj[i][j].basicDateLocalUser}`
+            }
+            // if not yet written, then write it
+            if(!document.querySelector(`#day${i} span#AU-dateformat`).innerText){
+                document.querySelector(`#day${i} span#AU-dateformat`).innerText = `${obj[i][j].basicDateLocalAU}`
+                document.querySelector(`#day${i} span#AU-dateformat`).style.setProperty("display","none")
+            }
+            // if not yet written, then write it
+            if(!document.querySelector(`#day${i} span#US-dateformat`).innerText){
+                document.querySelector(`#day${i} span#US-dateformat`).innerText = `${obj[i][j].basicDateLocalUS}`
+                document.querySelector(`#day${i} span#US-dateformat`).style.setProperty("display","none")
             }
 
             // Use this if you selected "standard" as the metric, but just select metric on the API call and you won't need to bother with it
@@ -240,7 +343,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
                 tempImperial = obj[i][j].main.temp;
                 tempImperial = roundedToFixed(tempImperial, 1)
                 tempMetric = (tempImperial - 32) / 1.8;
-                tempMetric = roundedToFixed(tempImperial, 1);
+                tempMetric = roundedToFixed(tempMetric, 1);
 
                 windSpeedImperial = obj[i][j].wind.speed
                 windSpeedImperial =  roundedToFixed(windSpeedImperial, 1);
@@ -253,7 +356,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
 
             dayTableEle.innerHTML += `
             <row>
-                <th id="tdTime">${obj[i][j].basicTime}</td>
+                <td id="tdTime">${obj[i][j].basicTime}</td>
                 <td id="tdTemp">
                     <span class="temp-metric metric" style="display:${metricDisplay};">${tempMetric} ${tempUnitsMetric}</span>
                     <span class="temp-imperial imperial" style="display:${imperialDisplay};">${tempImperial} ${tempUnitsImperial}</span>

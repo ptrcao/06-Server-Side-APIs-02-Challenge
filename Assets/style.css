@@ -1,3 +1,10 @@
+/* Need to do something about this to avoid columns resizing with each hide/show alternation wrt the metric/imperial units toggle */
+#tdWindSpeed span, #tdTemp span{}
+
+
+/* START toggle switch */
+/* https://hudecz.medium.com/how-to-create-a-pure-css-toggle-button-2fcc955a8984 */
+
 .toggleContainer {
     position: relative;
     display: grid;
@@ -16,6 +23,7 @@
     width: 50%;
     height: 100%;
     left: 0%;
+    /* left: 50%; */
     border-radius:20px;
     background: white;
     transition: all 0.3s;
@@ -37,13 +45,41 @@
   }
   .toggleCheckbox:checked + .toggleContainer div:last-child{
     color: #343434;
+    
     transition: color 0.3s;
   }
   .toggleCheckbox + .toggleContainer div:first-child{
     color: #343434;
+    /* color: white; */
     transition: color 0.3s;
   }
   .toggleCheckbox + .toggleContainer div:last-child{
     color: white;
+    /* color: #343434; */
     transition: color 0.3s;
   }
+
+/* END toggle switch */
+
+
+
+
+  /* CSS Animation onClick */
+  /* https://stackoverflow.com/a/58353279/9095603 */
+
+  @-webkit-keyframes flash {
+    50% { color: #ff8500; background:blue; }
+ 
+}
+.flash {
+    
+    -webkit-animation-name: flash;
+    -webkit-animation-duration: 900ms;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: ease-in-out;
+}   
+
+
+
+
+
