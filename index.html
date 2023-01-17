@@ -18,6 +18,14 @@
 </head>
 <body>
 
+  <!-- https://getbootstrap.com/docs/5.0/components/spinners/ -->
+  <!-- put the spinner at the top of the page for its CSS to make it full page -->
+  <div class="overlay d-flex justify-content-center align-items-center">
+    <h5>Please wait...</h5>
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
 
 <!-- https://getbootstrap.com/docs/5.3/components/modal/ -->
 <!-- Modal -->
@@ -121,15 +129,20 @@
           <!-- https://hudecz.medium.com/how-to-create-a-pure-css-toggle-button-2fcc955a8984 -->
           <input type="checkbox" id="toggle" class="toggleCheckbox units-switch" />
           <label for="toggle" class='toggleContainer'>
-            <div>metric &#8451;</div>   
-            <div>imperial &#8457;</div>
+            <div>imperial &#8457;</div>   
+            <div>metric &#8451;</div>
           </label>
 
+          <!-- for future feature development -->
+          <!--
           <input type="checkbox" id="toggle2" class="toggleCheckbox dateformat-switch" />
           <label for="toggle2" class='toggleContainer'>
             <div>DD/MM/YYYY</div>  
             <div>MM/DD/YYYY</div>
-          </label>          
+          </label>
+          -->
+          
+
         </div>
 
 
@@ -137,6 +150,7 @@
       <div class="row">
         <div class="col-xxl-2">
           <div class="search-container">
+            <label>Please use the search function to search for a city.</label>
             <form style="white-space: nowrap;">
               <!-- prevent linebreaks between two elements -->
               <!-- https://stackoverflow.com/a/6130848/9095603 -->
@@ -152,47 +166,48 @@
 
         </div>
         <div class="col-xxl-10 card-deck">
-    
-          <div class="row card-deck" id="day0">
+
+          <div class="card" id="day0" style="display: none;">
             
-            <div class="card">
+            
             <h2 id="today-title"></h2>
             <h5></h5>
             <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
             <table></table>
           
-          </div>
-          </div>
-
-
           
-          <div class="row"><h2 id="next-5-days-title"></h2>
+          </div>
 
-            <div class="col-xxl card" id="day1">
+
+        <!-- <div class="carousel slide">
+          <div id="four-day-outlook-container" class="carousel-inner"  data-bs-ride="carousel">
+            <h2 id="next-5-days-title"></h2>
+            
+            <div class="carousel-item" id="day1">
               <h5></h5>
               <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
               <table></table>
             </div>
 
-            <div class="col-xxl card" id="day2">
+            <div class="carousel-item" id="day2">
               <h5></h5>
               <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
               <table></table>
             </div>
 
-            <div class="col-xxl card" id="day3">
+            <div class="carousel-item" id="day3">
               <h5></h5>
               <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
               <table></table>
             </div>
 
-            <div class="col-xxl card" id="day4">
+            <div class="carousel-item" id="day4">
               <h5></h5>
               <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
               <table></table>
             </div>
 
-            <div class="col-xxl card" id="day5">
+            <div class="carousel-item" id="day5">
               <h5></h5>
               <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
               <table></table>
@@ -201,10 +216,51 @@
           </div>
         </div>
       </div>
+    </div> -->
+
+    <div id="four-day-outlook-container" style="display: none;">
+      <h2 id="next-5-days-title"></h2>
+
+      <div class="col-xxl card" id="day1" style="display: none;">
+        <h5></h5>
+        <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
+        <table></table>
+      </div>
+
+      <div class="col-xxl card" id="day2" style="display: none;">
+        <h5></h5>
+        <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
+        <table></table>
+      </div>
+
+      <div class="col-xxl card" id="day3" style="display: none;">
+        <h5></h5>
+        <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
+        <table></table>
+      </div>
+
+      <div class="col-xxl card" id="day4" style="display: none;">
+        <h5></h5>
+        <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
+        <table></table>
+      </div>
+
+      <div class="col-xxl card" id="day5" style="display: none;">
+        <h5></h5>
+        <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
+        <table></table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
 
 
       <!-- https://getbootstrap.com/docs/5.2/examples/footers/ -->
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top row">
         <div class="col-md-4 d-flex align-items-center">
           <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
             <!-- <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg> -->

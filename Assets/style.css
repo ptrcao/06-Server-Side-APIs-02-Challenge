@@ -1,12 +1,51 @@
+  /* https://stackoverflow.com/a/61054967/9095603 */
+  
+  .overlay {
+    background-color:#EFEFEF;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    /* top: 40%; */
+    left: 0px;
+    /* opacity: 0.5; */
+    /* filter: alpha(opacity=50); */
+    display: none!important;
+ }
+
+footer{
+  /* background-image: url(../Assets/images/winter-city-street-with-metal-fence-bare-trees/2209_w026_n002_2504b_p1_2504.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px; */
+  /* background-color: #6495ED; */
+  font-weight: bold;
+}
+body{
+  background-image: url(../Assets/images/view-misty-forest.jpg);
+  /* background-repeat: no-repeat; */
+  background-size: cover;
+}
+
+#four-day-outlook-container h2, .col-xxl-2, .card, footer{
+  background:rgba(255,255,255, 0.9);
+}
+
+/* .col-xxl-2{
+  min-height:75vh;
+} */
+
 .card{
   font-size:90%;
+  /* width: auto!important; */
+  padding: 4px;
 }
 
 .orange{color:orange}
 .cornflowerblue{color:#6495ED}
 
 /* Need to do something about this to avoid columns resizing with each hide/show alternation wrt the metric/imperial units toggle */
-#tdWindSpeed span, #tdTemp span{}
+/* #tdWindSpeed span, #tdTemp span{} */
 
 
 /* START toggle switch */

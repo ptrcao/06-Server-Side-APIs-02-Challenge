@@ -5,7 +5,23 @@ var globalCityName;
 var globalCityState;
 var globalCityCountry;
 
-function generatePrevCitiesList(){
+  // FUNCTIONS
+
+  // An on and off switch for the loading overlay which prevents user interaction while the page is being loaded or searches are executing
+
+  function loadingOverlayOn() {
+    document
+      .getElementsByClassName("overlay")[0]
+      .style.display = 'block'
+  }
+  function loadingOverlayOff() {
+    document
+      .getElementsByClassName("overlay")[0]
+      .style.display = 'none'
+  }
+
+
+async function generatePrevCitiesList(){
 if((localStorage.getItem('savedCities') !== null)){
     // How to Check if a Key Exists in localStorage Using JavaScript?
     // https://www.designcise.com/web/tutorial/how-to-check-if-a-key-exists-in-localstorage-using-javascript#:~:text=Learn%20how%20to%20check%20if%20an%20item%20is%20set%20in%20localStorage&text=localStorage%20property)%20has%20no%20hasItem,getItem('nonExistent')%20!%3D%3D
@@ -53,7 +69,7 @@ if((localStorage.getItem('savedCities') !== null)){
     cityInstanceBtn.setAttribute('class','city-saved-option')
     // cityInstanceBtn.setAttribute('display', 'block')
     // cityInstanceBtn.style.setProperty('display','block','!important')
-    cityInstanceBtn.setAttribute('class', 'btn btn-light')
+    cityInstanceBtn.setAttribute('class', 'btn btn-outline-primary')
     cityInstanceBtn.setAttribute('type', 'button')
 
     cityInstanceBtn.setAttribute('data-city', cityName)
@@ -74,7 +90,7 @@ if((localStorage.getItem('savedCities') !== null)){
 
 
 
-    cityInstanceBtn.addEventListener('click',function(e){
+    cityInstanceBtn.addEventListener('click',async function(e){
         // console.log('look here' + e)
         // console.log('test' + cityName)
 
@@ -84,15 +100,15 @@ if((localStorage.getItem('savedCities') !== null)){
         globalCityState === null;
         globalCityCountry === null;
 
-        globalCityName = document.getElementById(e.target.id).dataset.city
-        globalCityState = document.getElementById(e.target.id).dataset.state
+        globalCityName = e.target.dataset.city
+        globalCityState = e.target.dataset.state
         // if(cityState){globalCityState = cityState}
         // else{globalCityState === null}
-        globalCityCountry = document.getElementById(e.target.id).dataset.country
+        globalCityCountry = e.target.dataset.country
         
-
-        runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
-
+        loadingOverlayOn();
+        await runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
+        loadingOverlayOff();
 
     })
 
@@ -424,7 +440,7 @@ searchBtn.addEventListener('click',function(e){
 //test hardcode value
 // var inputtedCityName = 'Wellington';
 
-function getMatches(userInput,returnedMatchesLimit,credential){
+async function getMatches(userInput,returnedMatchesLimit,credential){
 fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`)
 .then(response => response.json())
 .then(data => {
@@ -471,7 +487,7 @@ fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${retur
         citySlotContainer.appendChild(cityInstanceBtn)
 
 
-        cityInstanceBtn.addEventListener('click', function(){
+        cityInstanceBtn.addEventListener('click', async function(){
 
             myModal.hide()
 
@@ -493,9 +509,9 @@ fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${retur
         // else{globalCityState === null}
         globalCityCountry = document.getElementById(id).dataset.country
 
-
-            runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
-
+        loadingOverlayOn();
+        await runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
+        loadingOverlayOff();
  
             
         })
@@ -519,7 +535,18 @@ fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${retur
 
 }
 
-function runSearch(cityName, cityState, country, cityLat, cityLng, detectedUnits){
+async function runSearch(cityName, cityState, country, cityLat, cityLng, detectedUnits){
+
+
+    var cardAll = document.querySelectorAll('.card')
+
+    Array.from(cardAll).forEach(node => {
+        // node.style.setProperty("display","inline-block","!important");
+        node.setAttribute("style","display: inline-block !important;")
+    })
+
+    document.getElementById("four-day-outlook-container").setAttribute("style","display: inline-block !important;")
+    
 
     console.log('check cityState: ' + cityState)
     console.log('check globalCityState: ' + globalCityState)
@@ -531,12 +558,12 @@ function runSearch(cityName, cityState, country, cityLat, cityLng, detectedUnits
     if(globalCityState != 'undefined' && globalCityName && globalCityCountry){
         // undefined because data attribute saves as data-state="undefined" when undefined
         h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
-        h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
+        h2Next5Days.innerHTML = `<span class="orange">4-day</span> outlook for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
     }
     else if (globalCityState = 'undefined' && globalCityName && globalCityCountry){
         // undefined because data attribute saves as data-state="undefined" when undefined
         h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName},${globalCityCountry}</span>`
-        h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityCountry}</span>`
+        h2Next5Days.innerHTML = `<span class="orange">4-day</span> outlook for <span class="cornflowerblue">${globalCityName}, ${globalCityCountry}</span>`
     }
 
 var newSearchObject = {
@@ -868,6 +895,8 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cit
 
 }
 )
+
+
 }
 
 
