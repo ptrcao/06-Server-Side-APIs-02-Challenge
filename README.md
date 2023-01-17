@@ -2,6 +2,8 @@
 # 06 Server-Side APIs: Weather Dashboard
 ## "Weathergaze"
 
+> Deployed app URL: https://ptrcao.github.io/06-Server-Side-APIs-02-Challenge/
+
 ### Features:
 * Allows user to search for weather forecast by city, using an intermediary modal to allow the user to refine their selection from a list of matches
 * Allows user to toggle between metric and imperial units
