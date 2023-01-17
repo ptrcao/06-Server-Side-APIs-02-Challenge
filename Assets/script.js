@@ -254,7 +254,7 @@ function toggleDDMMBtnState(){
 
 
 // Direct geocoding allows to get geographical coordinates (lat, lon) by using name of the location (city name or area name). If you use the limit parameter in the API call, you can cap how many locations with the same name will be seen in the API response (for instance, London in the UK and London in the US).
-// http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
+// https://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
 
 const apiKey = "1f17d7321af7f8489161dfb157e67bd3"
@@ -311,7 +311,7 @@ else{
 // City input
 // document.getElementById()
 
-// fetch(`http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}`)
+// fetch(`https://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}`)
 
 
 
@@ -441,7 +441,7 @@ searchBtn.addEventListener('click',function(e){
 // var inputtedCityName = 'Wellington';
 
 async function getMatches(userInput,returnedMatchesLimit,credential){
-fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`)
+fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`)
 .then(response => response.json())
 .then(data => {
 
@@ -855,7 +855,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cit
                     <span class="temp-metric metric" style="display:${metricDisplay};">${tempMetric} ${tempUnitsMetric}</span>
                     <span class="temp-imperial imperial" style="display:${imperialDisplay};">${tempImperial} ${tempUnitsImperial}</span>
                 </td>
-                <td><img src="http://openweathermap.org/img/wn/${obj[i][j].weather[0].icon}.png" alt="weather icon"></td>
+                <td><img src="https://openweathermap.org/img/wn/${obj[i][j].weather[0].icon}.png" alt="weather icon"></td>
                 <td id="tdConditions">${obj[i][j].weather[0].description}</td>
                 <td id="tdHumidity">${obj[i][j].main.humidity} %</td>
                 <td id="tdWindSpeed">
