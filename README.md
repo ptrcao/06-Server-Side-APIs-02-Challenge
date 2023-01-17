@@ -9,4 +9,6 @@
 * Search panel includes a panel of the 5 most recent city searches, allowing user to re-run previous searches at the convenience of one click
 
 ### Screenshot
-![This shows a mobile-responsive results page.](./Assets/images/readme-images/localhost_52330_02-Challenge_index.html.png)
+![This shows full page.](./Assets/images/readme-images/localhost_52330_02-Challenge_index.html.png)
+
+![This shows modal.](./Assets/images/readme-images/modal_search_matches.png)
