@@ -1,14 +1,198 @@
 
+var inputtedCityName;
+
+var globalCityName;
+var globalCityState;
+var globalCityCountry;
+
+function generatePrevCitiesList(){
+if((localStorage.getItem('savedCities') !== null)){
+    // How to Check if a Key Exists in localStorage Using JavaScript?
+    // https://www.designcise.com/web/tutorial/how-to-check-if-a-key-exists-in-localstorage-using-javascript#:~:text=Learn%20how%20to%20check%20if%20an%20item%20is%20set%20in%20localStorage&text=localStorage%20property)%20has%20no%20hasItem,getItem('nonExistent')%20!%3D%3D
+    // If you're thinking this might conflict with a null value that is stored in the localStorage, then you should not worry because localStorage only stores string values and 'null' !== null.
+    
+    let retrievedLocalStorage = localStorage.getItem("savedCities");
+    retrievedLocalStorage = JSON.parse(retrievedLocalStorage);
+
+
+
+    console.log('START retrievedLocalStorage' + retrievedLocalStorage)
+
+    let prevCityList = document.getElementById("prev-searched-cities")
+
+    
+    
+
+    let prevCityListHeading = document.querySelector('.search-container p')
+    prevCityListHeading.innerHTML = 'Previously searched cities:'
+    // This will overwrite if it already exits, which is fine
+
+    // prevCityList.parentNode.insertBefore(prevCityListHeading, prevCityList)
+    // prevCityList.appendChild(prevCityListHeading)
+
+    // Reset if already exits
+    prevCityList.innerHTML = '';
+
+    for(let i = 0; i < retrievedLocalStorage.length; i++){
+    let cityName = retrievedLocalStorage[i].cityName
+    let cityState = retrievedLocalStorage[i].cityState
+    let cityCountry = retrievedLocalStorage[i].cityCountry
+    let cityLat = retrievedLocalStorage[i].cityLat
+    let cityLng = retrievedLocalStorage[i].cityLng
+
+
+    let cityLi = document.createElement('li')
+    prevCityList.appendChild(cityLi)
+
+    let cityInstanceBtn = document.createElement('button')
+    // cityInstanceBtn.setAttribute('type','button')
+
+    let id = `prev-search-${i}`;
+    cityInstanceBtn.setAttribute('id', id)
+
+    cityInstanceBtn.setAttribute('class','city-saved-option')
+    // cityInstanceBtn.setAttribute('display', 'block')
+    // cityInstanceBtn.style.setProperty('display','block','!important')
+    cityInstanceBtn.setAttribute('class', 'btn btn-light')
+    cityInstanceBtn.setAttribute('type', 'button')
+
+    cityInstanceBtn.setAttribute('data-city', cityName)
+    cityInstanceBtn.setAttribute('data-state', cityState)
+    cityInstanceBtn.setAttribute('data-country', cityCountry)
+
+    cityInstanceBtn.innerHTML = `City name: <strong>${cityName}</strong><br>`
+    if(cityState){
+        cityInstanceBtn.innerHTML += `City state: ${cityState}<br>`
+    }
+    cityInstanceBtn.innerHTML += `Country: ${cityCountry}`
+
+    
+
+    cityLi.appendChild(cityInstanceBtn)
+  
+    // var specificCityInstanceBtn = document.getElementById(`prev-search-${i}`)
+
+
+
+    cityInstanceBtn.addEventListener('click',function(e){
+        // console.log('look here' + e)
+        // console.log('test' + cityName)
+
+        // for use in headings inside runSearch
+        // reset
+        globalCityName === null;
+        globalCityState === null;
+        globalCityCountry === null;
+
+        globalCityName = document.getElementById(e.target.id).dataset.city
+        globalCityState = document.getElementById(e.target.id).dataset.state
+        // if(cityState){globalCityState = cityState}
+        // else{globalCityState === null}
+        globalCityCountry = document.getElementById(e.target.id).dataset.country
+        
+
+        runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
+
+
+    })
+
+    }
+
+
+}
+
+
+}
+
+generatePrevCitiesList();
+
+// Include a JS file directly in another?
+// https://stackoverflow.com/a/70283698/9095603
+// const getStateCountry = require('./getstatecountry.js');
+
+// JavaScript ES6 Modules
+// https://youtu.be/cRHQNNcYf6s
+
+// Note that JavaScript ES6 Modules will not be supported by older browsers, so a fallback solution may be needed, e.g. Babel or nomodule
+
+import { getCountry, getState } from './getstatecountry.js'
+
+const gottenCountry = getCountry;
+const userState = getState;
+
+
+console.log({gottenCountry})
+console.log({userState})
+
+function getDateFormatString(browserlocale) {
+    
+    const options = {
+    //   hour: "numeric",
+    //   minute: "numeric",
+    //   second: "numeric",
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+    };
+  
+    const formatObj = new Intl.DateTimeFormat(browserlocale, options).formatToParts(
+      Date.now()
+    );
+  
+    return formatObj
+      .map((obj) => {
+        switch (obj.type) {
+        //   case "hour":
+        //     return "HH";
+        //   case "minute":
+        //     return "MM";
+        //   case "second":
+        //     return "SS";
+          case "day":
+            return "DD";
+          case "month":
+            return "MM";
+          case "year":
+            return "YYYY";
+          default:
+            return obj.value;
+        }
+      })
+      .join("");
+  }
+
+console.log(getDateFormatString("en-US")); //Expected Output: "MM/DD/YYYY, HH:MM:SS PM"
+
+console.log(getDateFormatString("ko-KR")); //Expected Output: "YYYY. MM. DD. 오후 HH:MM:SS"
+
+
+let language = navigator.language;
+console.log(language);
+// https://stackoverflow.com/questions/673905/how-to-determine-users-locale-within-browser#comment129149482_674570
+
+if(language){
+
+    // https://stackoverflow.com/a/70019245/9095603
+    console.log('Detected date format = ' + getDateFormatString(language));
+    
+
+}
+
+
+
+
+// toggle-style is the inline script tag used for the units choice button
+
 function toggleImperialBtnState(){
     document.getElementById("toggle-style").innerHTML = `
-    .toggleContainer::before {
+    #units-switch + .toggleContainer::before {
         left: 50%;
     }
-    .toggleCheckbox + .toggleContainer div:first-child{
+    #units-switch + .toggleCheckbox + .toggleContainer div:first-child{
         /* color: #343434; */
         color: white;
     }
-    .toggleCheckbox + .toggleContainer div:last-child{
+    #units-switch + .toggleCheckbox + .toggleContainer div:last-child{
         /* color: white; */
         color: #343434;
     }
@@ -20,16 +204,50 @@ document.getElementById("toggle-style").innerHTML = ``;
 // when you empty this style tag out, it will fall back to Assets/style.css styles, which is the style for metric
 }
 
+
+
+
+// toggle-style2 is the inline script tag used for the date format button
+function toggleMMDDBtnState(){
+    document.getElementById("toggle-style2").innerHTML = `
+    #dateformat-switch + .toggleContainer::before {
+        left: 50%;
+    }
+    #dateformat-switch + .toggleCheckbox + .toggleContainer div:first-child{
+        /* color: #343434; */
+        color: white;
+    }
+    #dateformat-switch + .toggleCheckbox + .toggleContainer div:last-child{
+        /* color: white; */
+        color: #343434;
+    }
+    `;
+}
+
+
+function toggleDDMMBtnState(){
+    document.getElementById("toggle-style2").innerHTML = ``;
+    // when you empty this style tag out, it will fall back to Assets/style.css styles, which is the style for metric
+    }
+
+
+
+
+
+
+
+
 // Direct geocoding allows to get geographical coordinates (lat, lon) by using name of the location (city name or area name). If you use the limit parameter in the API call, you can cap how many locations with the same name will be seen in the API response (for instance, London in the UK and London in the US).
 // http://api.openweathermap.org/geo/1.0/direct?q={city name},{state code},{country code}&limit={limit}&appid={API key}
 
 
-ApiKey = "1f17d7321af7f8489161dfb157e67bd3"
+const apiKey = "1f17d7321af7f8489161dfb157e67bd3"
 
-var long = 151.209900;
-var lat = -33.865143;
+// var long = 151.209900;
+// var lat = -33.865143;
 
-var country = "AU"
+var country;
+// var country = "AU"
 
 // temp
 // wind
@@ -39,7 +257,8 @@ var country = "AU"
 var unitsSwitch = document.getElementsByClassName("units-switch")[0]
 
 // test
-country = "MM"
+// country = language.match(/(?<=\-).*/);
+// console.log('regex-matched country = ' + country);
 
 // Automatically set units based on country returned by the API call
 var units;
@@ -169,20 +388,254 @@ unitsSwitch.addEventListener("click",function () {
 )
 
 
+// Number of the locations in the API response (up to 5 results can be returned in the API response)
+var limit = 5;
+
+const citySlotContainer = document.querySelector('.modal-body .d-grid');
+
+const myModal = new bootstrap.Modal(document.getElementById('city-select-modal'))
+
+const myModal2 = new bootstrap.Modal(document.getElementById('error-missing-input'))
+
+const myModal3 = new bootstrap.Modal(document.getElementById('error-no-city-matches-modal'))
 
 
-fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&units=${units}&appid=${ApiKey}`)
+
+var searchBtn = document.getElementById('search-button')
+var cityInputField = document.querySelector('.search-container input')
+
+searchBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    if(cityInputField.value){
+        inputtedCityName = cityInputField.value;
+        console.log('inputtedCityName: ' + inputtedCityName)
+        getMatches(inputtedCityName, limit, apiKey);
+    }
+    else{
+        // modal: missing input: Please enter a city name before attempting a search
+        // Note this is different from the other error: no results found; empty array returned
+   
+            myModal2.show()
+        
+        
+    }
+})
+
+//test hardcode value
+// var inputtedCityName = 'Wellington';
+
+function getMatches(userInput,returnedMatchesLimit,credential){
+fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`)
+.then(response => response.json())
+.then(data => {
+
+    if(data && data.length > 0){
+
+    // Searchable select in Bootstrap 5
+    // https://stackoverflow.com/a/68208211/9095603
+    // You can use what is known as a Datalist in Bootstrap5 to achieve that. It works almost exactly like the Live Search that you mentioned
+
+    // Reset from last search
+    citySlotContainer.innerHTML = '';
+
+    for (let i=0; i < data.length; i++){
+
+        let cityName = data[i].name
+        let cityState = data[i].state
+        let cityCountry = data[i].country
+        let cityLat = data[i].lat
+        let cityLng = data[i].lon
+
+        let cityInstanceBtn = document.createElement('button')
+        // cityInstanceBtn.setAttribute('type','button')
+
+        let id = `city-match-${i}`;
+        cityInstanceBtn.setAttribute('id', id)
+
+        cityInstanceBtn.setAttribute('class','city-option')
+        // cityInstanceBtn.setAttribute('display', 'block')
+        // cityInstanceBtn.style.setProperty('display','block','!important')
+        cityInstanceBtn.setAttribute('class', 'btn btn-dark')
+
+
+        cityInstanceBtn.setAttribute('data-city', cityName)
+        cityInstanceBtn.setAttribute('data-state', cityState)
+        cityInstanceBtn.setAttribute('data-country', cityCountry)
+
+
+        cityInstanceBtn.innerHTML = `City name: <strong>${cityName}</strong><br>`
+        if(data[i].state){
+            cityInstanceBtn.innerHTML += `City state: ${cityState}<br>`
+        }
+        cityInstanceBtn.innerHTML += `Country: ${cityCountry}`
+        citySlotContainer.appendChild(cityInstanceBtn)
+
+
+        cityInstanceBtn.addEventListener('click', function(){
+
+            myModal.hide()
+
+        // for use in headings inside runSearch
+
+        // globalCityName === null;
+        // globalCityState === null;
+        // globalCityCountry === null;
+
+        // globalCityName = cityName
+        // if(cityState){globalCityState = cityState}
+        // else{globalCityState === null}
+        // globalCityCountry = cityCountry
+
+
+        globalCityName = document.getElementById(id).dataset.city
+        globalCityState = document.getElementById(id).dataset.state
+        // if(cityState){globalCityState = cityState}
+        // else{globalCityState === null}
+        globalCityCountry = document.getElementById(id).dataset.country
+
+
+            runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
+
+ 
+            
+        })
+
+
+
+    }
+
+
+
+    
+    myModal.show()
+
+    }
+    else if (data = []){
+        myModal3.show()
+    }
+
+
+})
+
+}
+
+function runSearch(cityName, cityState, country, cityLat, cityLng, detectedUnits){
+
+    console.log('check cityState: ' + cityState)
+    console.log('check globalCityState: ' + globalCityState)
+    // Display searched city name in heading
+    var h2Today = document.getElementById('today-title')
+    var h2Next5Days = document.getElementById('next-5-days-title')
+
+
+    if(globalCityState != 'undefined' && globalCityName && globalCityCountry){
+        // undefined because data attribute saves as data-state="undefined" when undefined
+        h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
+        h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
+    }
+    else if (globalCityState = 'undefined' && globalCityName && globalCityCountry){
+        // undefined because data attribute saves as data-state="undefined" when undefined
+        h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName},${globalCityCountry}</span>`
+        h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityCountry}</span>`
+    }
+
+var newSearchObject = {
+    cityName: cityName,
+    cityState: cityState,
+    cityCountry: country,
+    cityLat: cityLat,
+    cityLng: cityLng,
+    detectedUnits: detectedUnits,
+}
+
+var retrievedLocalStorage = localStorage.getItem('savedCities');
+retrievedLocalStorage = JSON.parse(retrievedLocalStorage);
+
+
+
+// Rahat's example - you need to change the variables for your situation:
+// const arr = retrievedLocalStorage.map(a => {a.cityLat, a.cityLng})
+// arr.some(s => {return (s.lat == myObj.cityLat && s.lng == myObj.cityLng) } )
+
+
+
+
+
+if( retrievedLocalStorage === null){
+
+// with the array square brackets
+localStorage.setItem("savedCities", JSON.stringify([newSearchObject]));
+
+generatePrevCitiesList();
+
+}
+else if ( retrievedLocalStorage.length > 0 && retrievedLocalStorage.length < 5 ) {
+
+    retrievedLocalStorage.reverse()
+
+    
+
+    if( !retrievedLocalStorage.some(s => {return (s.cityLat == newSearchObject.cityLat && s.cityLng == newSearchObject.cityLng) } ) ){
+        // The reason why .includes check doesn't work:
+        // Check if an array of objects contains another object: https://stackoverflow.com/a/63336477/9095603
+        // Also explained here: https://stackoverflow.com/a/49187997/9095603
+        // this solution which converts objects to string first isn't entirely reliable if you can't guarantee the same order is preserved, for example: https://stackoverflow.com/a/201305/9095603
+        // https://stackoverflow.com/a/51603494/9095603
+
+
+
+
+        // warning, note that existingSearchObject.push(newSearchObject) itself gives the array element count, so don't use that, use existingSearchObject, which has now been changed
+        retrievedLocalStorage.push(newSearchObject);
+
+        retrievedLocalStorage.reverse()
+    console.log('existingSearchObject2: ' + retrievedLocalStorage)
+    localStorage.setItem("savedCities", JSON.stringify(retrievedLocalStorage));
+    }
+    
+    generatePrevCitiesList();
+
+}
+else if ( retrievedLocalStorage.length >= 5 ) {
+    
+    retrievedLocalStorage.reverse()
+
+
+
+    if( !retrievedLocalStorage.some(s => {return (s.cityLat == newSearchObject.cityLat && s.cityLng == newSearchObject.cityLng) } ) ){
+
+
+
+        retrievedLocalStorage.push(newSearchObject);
+    }
+
+    
+ while( retrievedLocalStorage.length > 5){
+    retrievedLocalStorage.shift();
+ }
+
+
+
+    retrievedLocalStorage.reverse()
+    localStorage.setItem("savedCities", JSON.stringify(retrievedLocalStorage));
+
+    generatePrevCitiesList();
+
+}
+
+
+fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLng}&units=${detectedUnits}&appid=${apiKey}`)
 .then( (response) => response.json())
 .then( data => {
     console.log(data)
     console.table(data.list)
     console.log(JSON.stringify(data))
 
-    timezone = data.city.timezone;
+    var timezone = data.city.timezone;
     console.log({timezone})
-    country = data.city.country;
+    var country = data.city.country;
     console.log({country})
-    cityName = data.city.name
+    var cityName = data.city.name
     console.log({cityName})
  
     var datesArray = [];
@@ -190,7 +643,21 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-    for(var i = 0; i < data.list.length; i++){
+    // // Display searched city name in heading
+    // var h2Today = document.getElementById('today-title')
+    // var h2Next5Days = document.getElementById('next-5-days-title')
+
+    // if(globalCityState && globalCityName && globalCityCountry){
+    //     h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
+    //     h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityState}, ${globalCityCountry}</span>`
+    // }
+    // else if (!globalCityState && globalCityName && globalCityCountry){
+    //     h2Today.innerHTML = `<span class="orange">Today's</span> forecast for <span class="cornflowerblue">${globalCityName},${globalCityCountry}</span>`
+    //     h2Next5Days.innerHTML = `<span class="orange">Next 5-day</span> forecast for <span class="cornflowerblue">${globalCityName}, ${globalCityCountry}</span>`
+    // }
+    
+
+    for(let i = 0; i < data.list.length; i++){
 
         // console.log(data.list[i]["dt_txt"])
         var unixTimestamp = data.list[i].dt;
@@ -206,7 +673,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         // How to Convert a Unix Timestamp to Time in JavaScript
 
         // Simply multiply Unix timestamp by 1000 to convert it to a JavaScript time, because Unix timestamp measures time as a number of seconds, whereas in JavaScript time is fundamentally specified as the number of milliseconds (elapsed since January 1, 1970 at 00:00:00 UTC).
-        jsTimestamp = unixTimestamp * 1000
+        var jsTimestamp = unixTimestamp * 1000
         var date = new Date(jsTimestamp);
         var basicDateLocalAU = date.toLocaleDateString("en-AU")
         var basicDateLocalUS = date.toLocaleDateString("en-US")
@@ -216,7 +683,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         console.log(basicDateLocalUS);   // Prints: 6/5/2022
         console.log(basicDateLocalUser);   // Prints: 6/5/2022
 
-        timeLocalAU = date.toLocaleTimeString("en-AU", {hour: '2-digit', minute:'2-digit'}) // Prints: 13:10:34
+        var timeLocalAU = date.toLocaleTimeString("en-AU", {hour: '2-digit', minute:'2-digit'}) // Prints: 13:10:34
 
         // How do I use .toLocaleTimeString() without displaying seconds?
         // https://stackoverflow.com/a/20430558/9095603
@@ -274,7 +741,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
     // console.log({result})
 
 
-    for(var i = 0; i < obj.length; i++){
+    for(let i = 0; i < obj.length; i++){
         // begin with i = 1 since i = 0 is still the current day, which is treated separately in this app
 
         var dayTableEle = document.querySelector(`#day${i} table`);
@@ -288,7 +755,7 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
         
 
         dayTableEle.innerHTML = `<row><th>Time</th><th>Temp</th><th></th><th>Conditions</th><th>Humidity</th><th>Wind speed</th></row>`
-        for(var j = 0; j < obj[i].length; j++){
+        for(let j = 0; j < obj[i].length; j++){
             console.log(obj[i].length);
            
             // if not yet written, then write it
@@ -326,32 +793,32 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
             // Strategy is to save both imperial and metric values to DOM, hide one or the other column depending on the current toggle
 
             if(units == 'metric'){
-                tempMetric = obj[i][j].main.temp;
+                var tempMetric = obj[i][j].main.temp;
                 tempMetric = roundedToFixed(tempMetric, 1);
-                tempImperial = (tempMetric*1.8) + 32;
+                var tempImperial = (tempMetric*1.8) + 32;
                 tempImperial = roundedToFixed(tempImperial, 1);
 
-                windSpeedMetric = obj[i][j].wind.speed
+                var windSpeedMetric = obj[i][j].wind.speed
                 windSpeedMetric = roundedToFixed(windSpeedMetric, 1);
-                windSpeedImperial = windSpeedMetric * 2.23694;
+                var windSpeedImperial = windSpeedMetric * 2.23694;
                 windSpeedImperial = roundedToFixed(windSpeedImperial,1);
 
-                metricDisplay = 'inline';
-                imperialDisplay = 'none';
+                var metricDisplay = 'inline';
+                var imperialDisplay = 'none';
             }
             else if(units == 'imperial'){
-                tempImperial = obj[i][j].main.temp;
+                var tempImperial = obj[i][j].main.temp;
                 tempImperial = roundedToFixed(tempImperial, 1)
-                tempMetric = (tempImperial - 32) / 1.8;
+                var tempMetric = (tempImperial - 32) / 1.8;
                 tempMetric = roundedToFixed(tempMetric, 1);
 
-                windSpeedImperial = obj[i][j].wind.speed
+                var windSpeedImperial = obj[i][j].wind.speed
                 windSpeedImperial =  roundedToFixed(windSpeedImperial, 1);
-                windSpeedMetric = windSpeedImperial / 2.23694;
+                var windSpeedMetric = windSpeedImperial / 2.23694;
                 windSpeedMetric = roundedToFixed(windSpeedMetric,1);
 
-                metricDisplay = 'none';
-                imperialDisplay = 'inline';
+                var metricDisplay = 'none';
+                var imperialDisplay = 'inline';
             }
 
             dayTableEle.innerHTML += `
@@ -401,6 +868,8 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&u
 
 }
 )
+}
+
 
 var currentYear = new Date().getFullYear()
 document.getElementById("current-year").innerText = currentYear;

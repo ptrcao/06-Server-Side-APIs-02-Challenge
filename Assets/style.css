@@ -1,3 +1,10 @@
+.card{
+  font-size:90%;
+}
+
+.orange{color:orange}
+.cornflowerblue{color:#6495ED}
+
 /* Need to do something about this to avoid columns resizing with each hide/show alternation wrt the metric/imperial units toggle */
 #tdWindSpeed span, #tdTemp span{}
 
@@ -83,3 +90,17 @@
 
 
 
+/* Own CSS */
+
+.city-option{
+  border: 1px black solid;
+  border-radius: 4px;
+}
+
+
+/* ol{
+  display: flex;
+  flex-direction: column-reverse;
+} */
+/* Cool reversal trick for li but not appropriate here as the numbers remain paired with the li content */
+/* https://stackoverflow.com/a/41772920/9095603 */
