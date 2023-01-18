@@ -9,6 +9,9 @@ var globalCityCountry;
 
   // An on and off switch for the loading overlay which prevents user interaction while the page is being loaded or searches are executing
 
+  // Async/await function to show, wait, hide overlay not working in javascript
+  // Your SO question answered: https://stackoverflow.com/a/75156438/9095603
+
     function loadingOverlayOn() {
     document
       .getElementsByClassName("overlay")[0]
