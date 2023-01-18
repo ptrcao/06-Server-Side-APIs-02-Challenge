@@ -9,15 +9,16 @@ var globalCityCountry;
 
   // An on and off switch for the loading overlay which prevents user interaction while the page is being loaded or searches are executing
 
-  function loadingOverlayOn() {
+    function loadingOverlayOn() {
     document
       .getElementsByClassName("overlay")[0]
-      .style.display = 'block'
+      .style.setProperty("display","flex","important");
+      // you need to use flex in order to make justify-content: center and align-items: center available to center the spinner child
   }
-  function loadingOverlayOff() {
+    function loadingOverlayOff() {
     document
       .getElementsByClassName("overlay")[0]
-      .style.display = 'none'
+      .style.setProperty("display","none","important");
   }
 
 
@@ -106,9 +107,9 @@ if((localStorage.getItem('savedCities') !== null)){
         // else{globalCityState === null}
         globalCityCountry = e.target.dataset.country
         
-        loadingOverlayOn();
+        // loadingOverlayOn();
         await runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
-        loadingOverlayOff();
+        // loadingOverlayOff();
 
     })
 
@@ -441,9 +442,9 @@ searchBtn.addEventListener('click',function(e){
 // var inputtedCityName = 'Wellington';
 
 async function getMatches(userInput,returnedMatchesLimit,credential){
-fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`)
-.then(response => response.json())
-.then(data => {
+const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${returnedMatchesLimit}&appid=${credential}`);
+const data = await response.json();
+
 
     if(data && data.length > 0){
 
@@ -509,9 +510,11 @@ fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${retu
         // else{globalCityState === null}
         globalCityCountry = document.getElementById(id).dataset.country
 
-        loadingOverlayOn();
+        // loadingOverlayOn();
+    
         await runSearch(cityName, cityState, cityCountry, cityLat, cityLng, units)
-        loadingOverlayOff();
+        
+        // loadingOverlayOff();
  
             
         })
@@ -531,21 +534,14 @@ fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=${retu
     }
 
 
-})
+
 
 }
 
 async function runSearch(cityName, cityState, country, cityLat, cityLng, detectedUnits){
 
 
-    var cardAll = document.querySelectorAll('.card')
-
-    Array.from(cardAll).forEach(node => {
-        // node.style.setProperty("display","inline-block","!important");
-        node.setAttribute("style","display: inline-block !important;")
-    })
-
-    document.getElementById("four-day-outlook-container").setAttribute("style","display: inline-block !important;")
+    loadingOverlayOn();
     
 
     console.log('check cityState: ' + cityState)
@@ -651,9 +647,9 @@ else if ( retrievedLocalStorage.length >= 5 ) {
 }
 
 
-fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLng}&units=${detectedUnits}&appid=${apiKey}`)
-.then( (response) => response.json())
-.then( data => {
+const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cityLng}&units=${detectedUnits}&appid=${apiKey}`)
+const data = await response.json()
+
     console.log(data)
     console.table(data.list)
     console.log(JSON.stringify(data))
@@ -893,10 +889,24 @@ fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${cityLat}&lon=${cit
     // }
     // )
 
-}
-)
 
 
+
+// var cardAll = document.querySelectorAll('.card')
+
+// Array.from(cardAll).forEach(node => {
+//     // node.style.setProperty("display","inline-block","!important");
+//     node.setAttribute("style","display: inline-block !important;")
+// })
+
+// document.getElementById("four-day-outlook-container").setAttribute("style","display: inline-block !important;")
+
+
+var cardAll = document.getElementById("card-container")
+
+cardAll.setAttribute("style","display: inline-block;")
+
+loadingOverlayOff();
 }
 
 
@@ -1062,3 +1072,12 @@ function roundedToFixed(input, digits){
 
 // Using Angle in degrees to draw arrow in the direction in Javascript on Canvas
 // https://stackoverflow.com/a/73391713/9095603
+
+
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+   }
+ }

@@ -20,7 +20,8 @@
 
   <!-- https://getbootstrap.com/docs/5.0/components/spinners/ -->
   <!-- put the spinner at the top of the page for its CSS to make it full page -->
-  <div class="overlay d-flex justify-content-center align-items-center">
+  <div class="overlay">
+    <!-- d-flex justify-content-center align-items-center -->
     <h5>Please wait...</h5>
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -165,9 +166,9 @@
           </div>
 
         </div>
-        <div class="col-xxl-10 card-deck">
+        <div id="card-container" class="col-xxl-10 card-deck" style="display: none;">
 
-          <div class="card" id="day0" style="display: none;">
+          <div class="card" id="day0">
             
             
             <h2 id="today-title"></h2>
@@ -218,34 +219,34 @@
       </div>
     </div> -->
 
-    <div id="four-day-outlook-container" style="display: none;">
+    <div id="four-day-outlook-container">
       <h2 id="next-5-days-title"></h2>
 
-      <div class="col-xxl card" id="day1" style="display: none;">
+      <div class="col-xxl card" id="day1">
         <h5></h5>
         <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
         <table></table>
       </div>
 
-      <div class="col-xxl card" id="day2" style="display: none;">
+      <div class="col-xxl card" id="day2">
         <h5></h5>
         <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
         <table></table>
       </div>
 
-      <div class="col-xxl card" id="day3" style="display: none;">
+      <div class="col-xxl card" id="day3">
         <h5></h5>
         <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
         <table></table>
       </div>
 
-      <div class="col-xxl card" id="day4" style="display: none;">
+      <div class="col-xxl card" id="day4">
         <h5></h5>
         <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
         <table></table>
       </div>
 
-      <div class="col-xxl card" id="day5" style="display: none;">
+      <div class="col-xxl card" id="day5">
         <h5></h5>
         <h6><span id="usercountry-dateformat"></span><span id="AU-dateformat"></span><span id="US-dateformat"></span></h6>
         <table></table>

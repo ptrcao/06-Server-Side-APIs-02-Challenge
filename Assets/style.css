@@ -10,8 +10,12 @@
     left: 0px;
     /* opacity: 0.5; */
     /* filter: alpha(opacity=50); */
-    display: none!important;
+    /* display: none; */
+    display: none;
+    justify-content:center;
+    align-items: center;
  }
+
 
 footer{
   /* background-image: url(../Assets/images/winter-city-street-with-metal-fence-bare-trees/2209_w026_n002_2504b_p1_2504.jpg);
