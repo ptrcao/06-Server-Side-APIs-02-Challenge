@@ -802,7 +802,7 @@ const data = await response.json()
         // dayTableEle.parentElement.insertBefore(newNode,dayTableEle)
         
 
-        dayTableEle.innerHTML = `<row><th>Time</th><th>Temp</th><th></th><th>Conditions</th><th>Humidity</th><th>Wind speed</th></row>`
+        dayTableEle.innerHTML = `<row><th>Time</th><th>Temp</th><th></th><th>Conditions</th><th>Humidity</th><th>Wind speed</th><th>Wind dir.</th></row>`
         for(let j = 0; j < obj[i].length; j++){
             console.log(obj[i].length);
            
