@@ -906,8 +906,10 @@ const data = await response.json()
 
 
 var cardAll = document.getElementById("card-container")
-
 cardAll.setAttribute("style","display: inline-block;")
+
+var unitsBox = document.getElementById("units-switch-container")
+unitsBox.style.setProperty("display","flex")
 
 loadingOverlayOff();
 }

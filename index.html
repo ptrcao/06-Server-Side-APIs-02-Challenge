@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font size responsiveness: https://stackoverflow.com/a/30459783/9095603 -->
-  
+
   <title>Weathergaze</title>
 
   
@@ -126,10 +126,11 @@
           <h6>3-hourly temperature forecasts for the next 5 days in your city</h6>
         </div>
 
-        <div style="background:beige; display:flex; align-items:center;" class="col-lg-3">
+        <div style="background:beige; align-items:center;" class="col-lg-3">
           <!-- vertical align middle in <div> -->
           <!-- https://stackoverflow.com/a/37779267/9095603 -->
 
+        <div id="units-switch-container" style="display:none;">
           <!-- How to create a pure CSS toggle button…? -->
           <!-- https://hudecz.medium.com/how-to-create-a-pure-css-toggle-button-2fcc955a8984 -->
           <input type="checkbox" id="toggle" class="toggleCheckbox units-switch" />
@@ -137,7 +138,8 @@
             <div>imperial &#8457;</div>   
             <div>metric &#8451;</div>
           </label>
-
+          
+        </div>
           <!-- for future feature development -->
           <!--
           <input type="checkbox" id="toggle2" class="toggleCheckbox dateformat-switch" />
