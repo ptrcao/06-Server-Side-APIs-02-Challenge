@@ -1,3 +1,25 @@
+// Github pages sets very aggressive cache headers (Cache-Control: max-age=86400 1 day, Expires 1 month ahead) on all served content.
+// If you update your pages and push to github, people revisiting the pages who have already got cached copies will not get the new pages without actually cleaning their browser cache.
+// How can a script running in a page determine that it is stale and force an update?
+// https://stackoverflow.com/a/13106972/9095603
+// Check if a new cache is available on page load:
+window.addEventListener('load', function(e) {
+
+    window.applicationCache.addEventListener('updateready', function(e) {
+      if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+        // Browser downloaded a new app cache.
+        // Swap it in and reload the page to get the new hotness.
+        window.applicationCache.swapCache();
+        if (confirm('A new version of this site is available. Load it?')) {
+          window.location.reload();
+        }
+      } else {
+        // Manifest didn't changed. Nothing new to server.
+      }
+    }, false);
+  
+  }, false);
+
 
 var inputtedCityName;
 
